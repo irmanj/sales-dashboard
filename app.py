@@ -1,12 +1,14 @@
 import streamlit as st
 import pandas as pd
 from cleaning import clean_data
+import streamlit as st
 
 st.set_page_config(page_title="Sales Dashboard", layout="wide")
 
 st.title("📊 Sales Dashboard")
-st.caption("Upload file CSV untuk melihat insight otomatis")
+st.caption("Dashboard analisis penjualan sederhana")
 
+st.info("Upload file CSV untuk melihat dashboard")
 uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
 
 if uploaded_file is not None:
@@ -28,7 +30,7 @@ if uploaded_file is not None:
         total_data = len(df)
 
         col1, col2 = st.columns(2)
-        col1.metric("💰 Total Sales", f"{int(total_sales):,}")
+        col1.metric("💰 Total Sales", f"Rp {total_sales:,.0f}")
         col2.metric("📦 Total Data", total_data)
 
         st.divider()
