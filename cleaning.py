@@ -58,4 +58,20 @@ def clean_data(file):
     df["Bulan"] = df["Tanggal"].dt.to_period("M")
     df["Hari"] = df["Tanggal"].dt.day_name()
 
+    # ubah hari ke bahasa Indonesia
+    hari_map = {
+        "Monday": "Senin",
+        "Tuesday": "Selasa",
+        "Wednesday": "Rabu",
+        "Thursday": "Kamis",
+        "Friday": "Jumat",
+        "Saturday": "Sabtu",
+        "Sunday": "Minggu"
+    }
+
+    df["Hari"] = df["Hari"].map(hari_map)
+
+    urutan_hari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"]
+    df["Hari"] = pd.Categorical(df["Hari"], categories=urutan_hari, ordered=True)
+
     return df
