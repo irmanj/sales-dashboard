@@ -13,6 +13,16 @@ if uploaded_file is not None:
     try:
         df = clean_data(uploaded_file)
 
+        st.sidebar.header("Filter")
+
+        selected_kota = st.sidebar.multiselect(
+            "Pilih Kota",
+            options=df["Kota"].unique(),
+            default=df["Kota"].unique()
+        )
+
+        df = df[df["Kota"].isin(selected_kota)]
+
         # ===== KPI =====
         total_sales = df["Sales"].sum()
         total_data = len(df)
@@ -45,13 +55,3 @@ if uploaded_file is not None:
 
 else:
     st.info("Silakan upload file CSV untuk mulai")
-
-st.sidebar.header("Filter")
-
-selected_kota = st.sidebar.multiselect(
-    "Pilih Kota",
-    options=df["Kota"].unique(),
-    default=df["Kota"].unique()
-)
-
-df = df[df["Kota"].isin(selected_kota)]
