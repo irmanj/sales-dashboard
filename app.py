@@ -46,7 +46,12 @@ if uploaded_file is not None:
             top_kota = df.groupby("Kota")["Sales"].sum().idxmax()
             top_sales = df.groupby("Kota")["Sales"].sum().max()
 
+            # produk terlaris
+            top_produk = df.groupby("Produk")["Sales"].sum().idxmax()
+
             st.success(f"🏆 Kota dengan sales tertinggi: **{top_kota} (Rp {top_sales:,.0f})**")
+
+            st.success(f"🏆 Produk paling laris: **{top_produk}**")
 
         st.divider()
 

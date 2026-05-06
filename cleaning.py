@@ -51,4 +51,11 @@ def clean_data(file):
     # convert sales ke numeric
     df["Sales"] = pd.to_numeric(df["Sales"], errors="coerce")
 
+    # hapus data rusak
+    df = df.dropna()
+
+    # fitur tambahan
+    df["Bulan"] = df["Tanggal"].dt.to_period("M")
+    df["Hari"] = df["Tanggal"].dt.day_name()
+
     return df
