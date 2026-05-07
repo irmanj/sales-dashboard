@@ -1,137 +1,93 @@
 import streamlit as st
+import pandas as pd
 from cleaning import clean_data
 
-# =========================
-# PAGE CONFIG
-# =========================
-st.set_page_config(
-    page_title="Coffee Shop Analytics",
-    page_icon="☕",
-    layout="wide"
-)
+# ===== CONFIG =====
+st.set_page_config(page_title="Sales Analytics Dashboard", layout="wide")
 
-# =========================
-# LOAD DATA
-# =========================
-df = clean_data()
-
-# =========================
-# HEADER
-# =========================
-st.title("☕ Coffee Shop Analytics Dashboard")
+st.title("📊 Sales Analytics Dashboard")
 st.caption("Insight otomatis dari data penjualan")
 
-st.divider()
+st.info("Upload file CSV untuk melihat dashboard")
 
-# =========================
-# SIDEBAR
-# =========================
-st.sidebar.header("🎛️ Filter Dashboard")
+uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
 
-selected_kota = st.sidebar.multiselect(
-    "Pilih Kota",
-    options=df["Kota"].unique(),
-    default=df["Kota"].unique()
-)
+if uploaded_file is not None:
+    try:
+        df = clean_data(uploaded_file)
 
-selected_produk = st.sidebar.multiselect(
-    "Pilih Produk",
-    options=df["Produk"].unique(),
-    default=df["Produk"].unique()
-)
+        # ===== FILTER =====
+        st.sidebar.header("🎛️ Filter")
 
-# filter data
-filtered_df = df[
-    (df["Kota"].isin(selected_kota)) &
-    (df["Produk"].isin(selected_produk))
-]
+        selected_kota = st.sidebar.multiselect(
+            "Pilih Kota",
+            options=df["Kota"].dropna().unique(),
+            default=df["Kota"].dropna().unique()
+        )
 
-# =========================
-# KPI
-# =========================
-total_sales = filtered_df["Sales"].sum()
-avg_sales = filtered_df["Sales"].mean()
-top_produk = filtered_df.groupby("Produk")["Sales"].sum().idxmax()
+        df = df[df["Kota"].isin(selected_kota)]
 
-col1, col2, col3 = st.columns(3)
+        # ===== KPI =====
+        total_sales = df["Sales"].sum()
+        total_data = len(df)
+        avg_sales = df["Sales"].mean()
 
-col1.metric(
-    "💰 Total Sales",
-    f"Rp {total_sales:,.0f}"
-)
+        col1, col2, col3 = st.columns(3)
+        col1.metric("💰 Total Sales", f"Rp {total_sales:,.0f}")
+        col2.metric("📦 Total Data", total_data)
+        col3.metric("📊 Avg Sales", f"Rp {avg_sales:,.0f}")
 
-col2.metric(
-    "📊 Avg Sales",
-    f"Rp {avg_sales:,.0f}"
-)
+        st.divider()
 
-col3.metric(
-    "🔥 Top Product",
-    top_produk
-)
+        # ===== INSIGHT =====
+        st.subheader("🧠 Insight Otomatis")
 
-st.divider()
+        if not df.empty:
+            top_kota = df.groupby("Kota")["Sales"].sum().idxmax()
+            top_sales = df.groupby("Kota")["Sales"].sum().max()
 
-# =========================
-# CHARTS
-# =========================
-col1, col2 = st.columns(2)
+            # produk terlaris
+            top_produk = df.groupby("Produk")["Sales"].sum().idxmax()
 
-with col1:
-    st.subheader("🏙️ Sales per Kota")
-    kota_chart = filtered_df.groupby("Kota")["Sales"].sum()
-    st.bar_chart(kota_chart)
+            st.success(f"🏆 Kota dengan sales tertinggi: **{top_kota} (Rp {top_sales:,.0f})**")
 
-with col2:
-    st.subheader("☕ Sales per Produk")
-    produk_chart = filtered_df.groupby("Produk")["Sales"].sum()
-    st.bar_chart(produk_chart)
+            st.success(f"🏆 Produk paling laris: **{top_produk}**")
 
-st.divider()
+        st.divider()
 
-# =========================
-# SALES TREND
-# =========================
-st.subheader("📈 Sales Trend")
+        # ===== TABLE =====
+        st.subheader("📄 Cleaned Data")
+        st.dataframe(df, use_container_width=True)
 
-trend = filtered_df.groupby("Tanggal")["Sales"].sum()
-st.line_chart(trend)
+        # ===== CHART =====
+        col1, col2 = st.columns(2)
 
-st.divider()
+        with col1:
+            st.subheader("🏙️ Sales per Kota")
+            kota_sales = df.groupby("Kota")["Sales"].sum().sort_values(ascending=False)
+            st.bar_chart(kota_sales)
 
-# =========================
-# INSIGHT
-# =========================
-st.subheader("🧠 Insight Otomatis")
+        with col2:
+            st.subheader("📈 Sales Trend")
+            df_trend = df.dropna(subset=["Tanggal"])
+            trend = df_trend.groupby(df_trend["Tanggal"].dt.to_period("M"))["Sales"].sum()
+            trend.index = trend.index.astype(str)
+            st.line_chart(trend)
 
-top_kota = filtered_df.groupby("Kota")["Sales"].sum().idxmax()
+        st.divider()
 
-st.success(
-    f"""
-    📍 Kota dengan penjualan tertinggi: {top_kota}
+        # ===== DOWNLOAD =====
+        st.subheader("📥 Download Data")
 
-    ☕ Produk paling laku: {top_produk}
+        csv = df.to_csv(index=False).encode('utf-8')
 
-    💰 Total penjualan: Rp {total_sales:,.0f}
-    """
-)
+        st.download_button(
+            label="Download Clean Data",
+            data=csv,
+            file_name="clean_data.csv",
+            mime="text/csv"
+        )
 
-st.divider()
-
-# =========================
-# TABLE
-# =========================
-st.subheader("📄 Cleaned Data")
-st.dataframe(filtered_df, use_container_width=True)
-
-# =========================
-# DOWNLOAD
-# =========================
-csv = filtered_df.to_csv(index=False).encode("utf-8")
-
-st.download_button(
-    label="📥 Download Cleaned Data",
-    data=csv,
-    file_name="cleaned_data.csv",
-    mime="text/csv"
-)
+    except Exception as e:
+        st.error("Terjadi error saat memproses data 😢")
+        st.text(str(e))
