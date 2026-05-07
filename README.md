@@ -127,9 +127,8 @@ Dashboard automatically:
 ---
 
 # 📸 Dashboard Preview
-```markdown
+
 ![App Screenshot](preview.png)
-```
 
 ---
 
