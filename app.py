@@ -1,12 +1,43 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 from cleaning import clean_data
 
 # ===== CONFIG =====
 st.set_page_config(page_title="Sales Analytics Dashboard", layout="wide")
 
+# =========================
+# CUSTOM CSS
+# =========================
+st.markdown("""
+<style>
+.main {
+    background-color: #f8fafc;
+}
+
+.block-container {
+    padding-top: 2rem;
+}
+
+.metric-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+}
+
+h1 {
+    font-weight: 700;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# =========================
+# HEADER
+# =========================
 st.title("📊 Sales Analytics Dashboard")
-st.caption("Insight otomatis dari data penjualan")
+st.caption("Analyze revenue, orders, and business trends")
 
 st.info("Upload file CSV untuk melihat dashboard")
 
