@@ -1,31 +1,18 @@
 ````md
 # 📊 Sales Dashboard Project
 
-Dashboard analisis penjualan interaktif menggunakan Python dan Streamlit.
+Interactive sales dashboard built using Streamlit and Python to analyze revenue, sales trends, and business performance.
 
 ---
 
 # ✨ Features
 
-- Upload file CSV penjualan
-- Data cleaning otomatis
-- Filter data berdasarkan:
-  - Tanggal
-  - Produk
-  - Kota / Region
-- KPI Cards:
-  - Total Sales
-  - Total Orders
-  - Average Order Value
-  - Profit
-- Visualisasi interaktif:
-  - Sales Trend
-  - Top Products
-  - Sales by Category
-  - Regional Performance
-- Download cleaned data
-- Responsive dashboard UI
-
+- KPI Monitoring
+- Interactive Filters
+- Sales Trend Analysis
+- City Performance Analysis
+- Download Cleaned Data
+- Automated Business Insights
 ---
 
 # 🛠️ Tech Stack
@@ -37,6 +24,17 @@ Dashboard analisis penjualan interaktif menggunakan Python dan Streamlit.
 
 ---
 
+## 📈 Business Insights
+
+This dashboard helps businesses:
+
+- Identify top-performing cities
+- Monitor revenue trends
+- Discover best-selling products
+- Analyze sales performance interactively
+
+---
+
 # 📂 Project Structure
 
 ```bash
@@ -45,7 +43,7 @@ sales-dashboard/
 ├── app.py                # Main Streamlit dashboard
 ├── cleaning.py           # Data cleaning process
 ├── requirements.txt      # Python dependencies
-├── sample_data.csv       # Example dataset
+├── data/                 # Example dataset
 └── README.md
 ````
 
