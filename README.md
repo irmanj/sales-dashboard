@@ -131,7 +131,7 @@ Dashboard automatically:
 Add screenshot here:
 
 ```markdown
-![Dashboard Preview](preview.png)
+![Dashboard](preview.png)
 ```
 
 ---
