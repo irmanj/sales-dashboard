@@ -182,21 +182,3 @@ https://www.linkedin.com/in/irma-nur-jayanti/
 ```
 
 ---
-
-# ⭐ Future Improvements
-
-* Authentication login
-* Database integration
-* Real-time analytics
-* Forecasting model
-* Export PDF report
-* AI insight summary
-
----
-
-# 📄 License
-
-This project is open-source and available for personal and commercial use.
-
-```
-```
