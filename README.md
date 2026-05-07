@@ -127,11 +127,8 @@ Dashboard automatically:
 ---
 
 # 📸 Dashboard Preview
-
-Add screenshot here:
-
 ```markdown
-![Dashboard](preview.png)
+![App Screenshot](preview.png)
 ```
 
 ---
